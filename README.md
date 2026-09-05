@@ -1,25 +1,31 @@
-# Nirnay Pay (RecoveryOS)
+# Nirnay Pay (RecoveryOS) 🚀
 
-> **AI Revenue Recovery Orchestration Platform for Razorpay AI Buildathon — Track 03**  
-> *Find revenue that’s slipping away and win it back with compliant, financial-first AI orchestration.*
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
+![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB.svg?logo=python&logoColor=white)
+![Backend](https://img.shields.io/badge/Backend-FastAPI-009688.svg?logo=fastapi&logoColor=white)
+![Frontend](https://img.shields.io/badge/Frontend-React_19-61DAFB.svg?logo=react&logoColor=black)
+![Language](https://img.shields.io/badge/Language-TypeScript-3178C6.svg?logo=typescript&logoColor=white)
+![Styling](https://img.shields.io/badge/Styling-Tailwind_CSS-06B6D4.svg?logo=tailwindcss&logoColor=white)
+![Database](https://img.shields.io/badge/Database-PostgreSQL-4169E1.svg?logo=postgresql&logoColor=white)
+![AI Engine](https://img.shields.io/badge/AI_Engine-Qwen_2.5%3A7B-FF6F00.svg)
+![Compliance](https://img.shields.io/badge/Compliance-RBI_DND_Enforced-2E7D32.svg)
+![Ledger](https://img.shields.io/badge/Financial_Ledger-100%25_Single--Paise-4CAF50.svg)
 
-[GitHub Repository](https://github.com/jaybankar07/nirnay-pay-dashboard.git) | [Track 03 Audit Report](file:///C:/Users/ASUS/.gemini/antigravity-ide/brain/d10217a9-2e19-46bc-b304-3c86db9b3d91/track03_comprehensive_audit_checklist.md) | [Walkthrough](file:///C:/Users/ASUS/.gemini/antigravity-ide/brain/d10217a9-2e19-46bc-b304-3c86db9b3d91/walkthrough.md)
+**Nirnay Pay (RecoveryOS)** is an authoritative, financial-first enterprise platform designed for automated revenue loss detection, AI-driven root cause diagnosis, compliant intervention selection, and single-paise financial recovery orchestration. Engineered specifically for digital merchants, subscription platforms, and fintechs (complying with **RBI DND contact windows**, **PCI-DSS transaction boundaries**, and **strict attempt stopping rules**), Nirnay Pay combines local machine learning models with hard deterministic financial authority to ensure zero prompt-injection financial overrides, zero double-charges, and complete auditability across your private infrastructure.
 
 ---
 
 ## 📌 Overview
 
-**Nirnay Pay (RecoveryOS)** is an authoritative, financial-first revenue loss detection and recovery orchestration platform built for the **Razorpay AI Buildathon (Track 03 — AI Revenue Recovery)**. 
+Revenue loss rarely happens in one clean step: payment gateways degrade, checkouts get abandoned, subscription renewals fail, and corporate receivables go overdue. Digital merchants lose up to 15–20% of annual recurring revenue due to unrecovered drop-offs and uncoordinated retry attempts.
 
-Revenue loss rarely happens in one clean step: payment gateways degrade, checkouts get abandoned, subscription renewals fail, and corporate receivables go overdue. Nirnay Pay closes the loop from real-time problem detection to AI diagnosis, compliant intervention selection, net financial yield scoring, and bounded recovery execution.
-
-Built on an **explicit finite state machine**, **deterministic financial governance**, **dual AI agent architecture**, and **single-paise database reconciliation**, Nirnay Pay guarantees zero prompt-injection financial overrides, zero double charges, and 100% auditability across every recovered rupee.
+Nirnay Pay closes the loop from real-time problem detection to AI diagnosis, compliant intervention selection, net financial yield scoring, and bounded recovery execution. Built on an **explicit finite state machine**, **deterministic financial governance**, **dual AI agent architecture**, and **single-paise database reconciliation**, Nirnay Pay guarantees complete auditability across every recovered rupee.
 
 ---
 
 ## 🎯 Problem Statement
 
-Digital merchants lose up to 15-20% of potential revenue due to unrecovered payment drop-offs and fragmented recovery attempts:
+Digital merchants lose significant revenue due to fragmented, non-compliant recovery workflows:
 
 - **Payment Failures & Gateway Degradations**: Involuntary churn occurs when temporary technical failures are treated as permanent card declines.
 - **Checkout Abandonments**: Abandoned carts are frequently lost because merchants lack automated, timely, and compliant intervention mechanisms.
@@ -43,7 +49,7 @@ Nirnay Pay introduces an **Authoritative 6-Stage Recovery Decision Pipeline** po
 - **Multi-Scenario Ingestion**: Real-time detection across `PAYMENT_FAILURE`, `CHECKOUT_ABANDONMENT`, `SUBSCRIPTION_FAILURE`, and `OVERDUE_RECEIVABLE`.
 - **Dual AI Agent System**:
   - **Agent 1 (`nirnay_revenue_diagnosis_agent`)**: Local Qwen 2.5:7B diagnosis agent categorizing root cause and confidence.
-  - **Agent 2 (`nirnay_recovery_communication_agent`)**: Hinglish & English customer outreach rationale generator.
+  - **Agent 2 (`nirnay_recovery_communication_agent`)**: Customer outreach rationale generator.
 - **Compliance Gate Engine**: Enforces attempt limits, cooldown periods, and legal contact rules before authorizing outreach.
 - **RecoveryScore Valuation Engine**: Mathematically selects the intervention that yields maximum expected net recovery value.
 - **Bounded Execution Simulator**: Models gateway retries, customer responses, and timing causally without live card charges.
@@ -61,9 +67,8 @@ Nirnay Pay introduces an **Authoritative 6-Stage Recovery Decision Pipeline** po
 
 ---
 
-## 📸 Screenshots & Pipeline Demo
+## 📸 Screenshots & Decision Pipeline
 
-### Authoritative 6-Stage Recovery Decision Pipeline
 ```text
 [ 1. AI Diagnosis ] ──> [ 2. Compliance ] ──> [ 3. Recovery Rights ]
          │                       │                       │
@@ -112,7 +117,7 @@ flowchart TD
 
 | Layer | Technology / Model |
 | :--- | :--- |
-| **Frontend** | React 19, Vite 8, TypeScript, Tailwind CSS, TanStack Router/Query, Recharts, Lucide Icons |
+| **Frontend** | React 19, Vite 8, TypeScript, Tailwind CSS, TanStack Router/Query, Recharts |
 | **Backend / API** | Python 3.11, FastAPI, Uvicorn, Pydantic v2, SQLAlchemy 2.0 |
 | **Database** | PostgreSQL / Supabase, SQLite (Local fallback) |
 | **AI / ML Models** | Ollama (Local `qwen2.5:7b` model), xAI Grok API (`grok-beta` fallback) |
@@ -151,7 +156,7 @@ Nirnay Pay/
 ├── nirnay_revenue_diagnosis_agent/  # Agent 1 (Local Qwen Diagnosis Package)
 ├── nirnay_recovery_communication_agent/ # Agent 2 (Communication Agent Package)
 ├── database/                # SQL Schema & Seed Files
-├── scripts/                 # Canonical Verification Harness & QA Scripts
+├── scripts/                 # Verification Harness & QA Scripts
 ├── .env.example             # Environment Configuration Template
 ├── .gitignore               # Git Ignore Rules
 └── README.md                # Technical Documentation
@@ -242,13 +247,13 @@ Frontend Dashboard runs at: `http://localhost:5173` (or `http://localhost:8082`)
 
 ---
 
-## 📊 Results & Verified Benchmarks
+## 📊 Performance & Verified Metrics
 
 Nirnay Pay includes an automated QA and benchmark suite verifying system performance under load:
 
 | Metric / Test | Target | Result | Status |
 | :--- | :--- | :--- | :-: |
-| **Canonical 100-Case Benchmark** | 100% Pass | **100/100 Cases Recovered / Handled** | 🟢 **PASSED** |
+| **100-Case Execution Benchmark** | 100% Pass | **100/100 Cases Recovered / Handled** | 🟢 **PASSED** |
 | **Overview Query Latency** | < 50ms | **7.48 ms (Avg)** | 🟢 **PASSED** |
 | **Concurrent Stress Test** | 50 Requests | **50/50 Succeeded (0 Failures)** | 🟢 **PASSED** |
 | **Single-Paise Ledger Integrity** | 0 Variance | **100% Exact Match** | 🟢 **PASSED** |
@@ -282,29 +287,6 @@ python backend/scripts/comprehensive_qa_security_audit.py
 
 ---
 
-## 🗺️ Roadmap & Future Scope
-
-### Completed Features (V1.0)
-- [x] Multi-scenario revenue risk detection engine
-- [x] Dual AI agent system (Qwen 2.5:7B diagnosis & Grok/Qwen communication)
-- [x] Compliance Gate with Indian DND window enforcement
-- [x] RecoveryScore net valuation formula engine
-- [x] Bounded execution simulator & single-paise financial ledger
-- [x] Real-time React + Vite merchant dashboard with audit timeline
-
-### Planned Future Extensions
-- [ ] Direct integration with Razorpay Webhook subscriptions
-- [ ] WhatsApp & SMS gateway adapters for automated customer outreach
-- [ ] Multi-currency FX auto-hedging for cross-border overdue receivables
-
----
-
 ## 📜 License
 
-Distributed under the **MIT License**. Created for the **Razorpay AI Buildathon — Track 03**.
-
----
-
-## 📬 Contributors
-
-- **Jay Bankar** — [*GitHub: @jaybankar07*](https://github.com/jaybankar07)
+Distributed under the **MIT License**.
