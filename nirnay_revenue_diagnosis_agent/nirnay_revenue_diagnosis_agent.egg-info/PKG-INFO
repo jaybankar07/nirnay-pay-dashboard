@@ -1,0 +1,199 @@
+Metadata-Version: 2.4
+Name: nirnay-revenue-diagnosis-agent
+Version: 1.0.0
+Summary: Nirnay Revenue Diagnosis Agent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
+# Nirnay Revenue Diagnosis Agent
+
+A standalone, provider-independent AI agent whose single responsibility
+is to answer:
+
+> **"Why is this revenue at risk?"**
+
+It does **not** decide what recovery action to take, determine
+compliance, calculate a RecoveryScore, override merchant policy, or
+execute anything. It has zero external runtime dependencies (standard
+library only) and no frontend, backend, database, or UI — it is a pure
+Python library meant to be imported by another application.
+
+## Install / import
+
+No packaging step required — copy the `nirnay_agent/` package into your
+project (or install it as a local package) and import it:
+
+```python
+from nirnay_agent import RevenueDiagnosisAgent
+
+agent = RevenueDiagnosisAgent()  # rule-engine only, zero config needed
+
+result = agent.diagnose({
+    "recovery_case_id": "case_123",
+    "scenario_type": "PAYMENT_FAILURE",
+    "decline_code": "INSUFFICIENT_FUNDS",
+    "successful_payment_count": 12,
+    "failed_payment_count": 0,
+})
+
+print(result.to_dict())
+# {
+#   "schema_version": "1.0",
+#   "recovery_case_id": "case_123",
+#   "scenario_type": "PAYMENT_FAILURE",
+#   "root_cause": "INSUFFICIENT_FUNDS",
+#   "confidence": 0.97,
+#   "diagnosis": "Based on the available evidence, the payment failed due to
+#                 insufficient funds on the customer's payment method. ...",
+#   "evidence": [...],
+#   "uncertainties": [],
+#   "diagnosis_mode": "RULE"
+# }
+```
+
+An async entry point with an identical output contract is also available:
+
+```python
+result = await agent.diagnose_async(case)
+```
+
+## Supported scenarios
+
+- `PAYMENT_FAILURE`
+- `CHECKOUT_ABANDONMENT`
+- `SUBSCRIPTION_FAILURE`
+- `OVERDUE_RECEIVABLE`
+
+Each scenario has its own controlled root-cause taxonomy (see
+`nirnay_agent/enums.py`), including an `UNKNOWN_*` category used whenever
+evidence is insufficient. The agent never guesses.
+
+## Plugging in an LLM (optional)
+
+The agent works standalone with the deterministic rule engine only. To
+add LLM-assisted reasoning for ambiguous/unstructured cases, implement
+the small `DiagnosisModel` interface for whichever provider you use:
+
+```python
+from nirnay_agent.llm import DiagnosisModel, LLMDiagnosisResponse
+
+class MyProvider(DiagnosisModel):
+    name = "my-llm"
+
+    def generate_structured_diagnosis(self, prompt_context, timeout_seconds):
+        # call your provider, map its response into LLMDiagnosisResponse
+        ...
+        return LLMDiagnosisResponse(
+            root_cause="TEMPORARY_PROCESSING_FAILURE",
+            confidence=0.7,
+            diagnosis="...",
+            evidence=[{"signal": "...", "relevance": "..."}],
+            uncertainties=[],
+        )
+
+agent = RevenueDiagnosisAgent(llm=MyProvider())
+```
+
+Every LLM response is validated against the controlled taxonomy before
+use. If the LLM times out, fails, or returns a malformed/invalid
+response, the agent retries once (configurable) and then falls back to
+the deterministic rule engine (`diagnosis_mode: "FALLBACK"`) — it never
+raises the failure to the caller and never blocks on the LLM
+indefinitely.
+
+## Pipeline
+
+```
+Input validation
+    -> Input normalization
+    -> Signal extraction
+    -> Scenario-specific analysis (deterministic rule engine)
+    -> Root-cause classification
+    -> [LLM consulted only if structured signals are ambiguous]
+    -> Confidence estimation
+    -> Evidence extraction
+    -> Structured diagnosis
+    -> Output validation
+```
+
+Deterministic interpretation is always preferred when strong structured
+signals exist (e.g. a known decline code); the LLM is only consulted when
+the rule engine cannot reach a confident conclusion on its own.
+
+## Output contract
+
+```json
+{
+  "schema_version": "1.0",
+  "recovery_case_id": "...",
+  "scenario_type": "...",
+  "root_cause": "...",
+  "confidence": 0.0,
+  "diagnosis": "...",
+  "evidence": [{"signal": "...", "relevance": "..."}],
+  "uncertainties": ["..."],
+  "diagnosis_mode": "RULE | AI | FALLBACK"
+}
+```
+
+No other fields are ever emitted — in particular, never a recovery
+action, compliance approval, Recovery Rights decision, RecoveryScore, or
+execution command.
+
+## Error handling
+
+Invalid input raises `nirnay_agent.InputValidationError` (never a
+malformed result):
+
+```python
+from nirnay_agent import InputValidationError
+
+try:
+    agent.diagnose({"recovery_case_id": "x", "scenario_type": "REFUND"})
+except InputValidationError as e:
+    print(e.to_dict())
+    # {"error": "INVALID_INPUT", "message": "Unsupported scenario_type.", "field": "scenario_type"}
+```
+
+## Testing
+
+The full test suite runs offline against a configurable mock LLM
+provider — no live provider/API key required:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+42 tests cover: clear/ambiguous diagnoses across all four scenarios,
+missing fields, conflicting signals, invalid/malformed/timed-out/failing
+LLM responses, deterministic fallback, confidence bounds, hallucination
+prevention, unsupported/invalid input, structured output validation, the
+async interface, and the recovery-action safety boundary.
+
+## Project layout
+
+```
+nirnay_agent/
+  __init__.py          Public API surface
+  agent.py              RevenueDiagnosisAgent orchestrator (the entry point)
+  models.py              RecoveryCaseInput / DiagnosisResult / Evidence / Signal
+  enums.py                Controlled scenario & root-cause taxonomy
+  validation.py            Input validation (section 2B)
+  normalization.py          Input normalization
+  signals.py                  Signal extraction
+  rules.py                     Deterministic, scenario-specific rule engine
+  confidence.py                  Confidence calibration bands
+  combine.py                       Rule <-> LLM conflict resolution
+  narrative.py                       Human-readable diagnosis text (RULE/FALLBACK)
+  output_validation.py                Final output contract validation
+  config.py                            Timeouts / retries / thresholds
+  telemetry.py                          Structured internal telemetry
+  exceptions.py                          Structured error types
+  llm/
+    base.py       Provider-independent DiagnosisModel interface
+    parsing.py      Validates raw LLM output
+    prompting.py      Builds the context payload sent to an LLM
+    mock.py             Configurable mock provider for tests
+tests/
+  test_agent.py    42 tests, no live LLM required
+```

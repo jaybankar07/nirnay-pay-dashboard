@@ -1,0 +1,42 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment files & secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+venv/
+ENV/
+env/
+
+# Database artifacts
+*.db
+*.sqlite3
+
+# Node & Frontend Build Artifacts
+node_modules/
+dist/
+dist-ssr/
+.output/
+.vinxi/
+.tanstack/
+.nitro/
+.wrangler/
+.dev.vars
+build/
+
+# Pytest / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE & OS Metadata
+.vscode/
+.idea/
+# Excluded non-code reference docs
+Docs/
+docs/

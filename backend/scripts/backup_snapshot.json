@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-09-05T10:23:46.048456",
+  "tables": {
+    "financial_ledger_entries": 1,
+    "outbox_events": 3,
+    "batch_runs": 85,
+    "idempotency_keys": 68,
+    "audit_events": 2454,
+    "recovery_outcomes": 75,
+    "recovery_actions": 77,
+    "decisions": 92,
+    "recovery_cases": 5365,
+    "recovery_policies": 2,
+    "subscriptions": 1,
+    "revenue_events": 5365,
+    "customers": 5346,
+    "merchants": 2
+  }
+}
