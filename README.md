@@ -280,7 +280,7 @@ python backend/scripts/comprehensive_qa_security_audit.py
 
 ## 🔐 Security & Governance
 
-- **Secrets Isolation**: No API keys or plain-text secrets committed; loaded via `.env`.
+- **Secrets & API Keys**: Zero plain-text credentials or API keys are hardcoded in the codebase. All runtime configuration and optional external credentials (such as `GROK_API_KEY` / `XAI_API_KEY` used for testing Agent 2 cloud communication fallbacks) are safely loaded via environment variables (`.env`).
 - **Multi-Tenant Data Boundaries**: Every repository query enforces strict `merchant_id` tenant scoping.
 - **Regulatory Compliance**: RBI DND contact window (21:00–08:00 IST) enforced deterministically.
 - **Idempotency Locks**: PostgreSQL atomic row locking (`FOR UPDATE`) prevents duplicate recovery calls.
